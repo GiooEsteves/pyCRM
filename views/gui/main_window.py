@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import simpledialog, messagebox
 from controllers.customer_controller import CustomerController
 from controllers.product_controller import ProductController
 from controllers.order_controller import OrderController
@@ -7,7 +7,26 @@ from controllers.order_controller import OrderController
 class CRMApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("CRM")
+        self.root.title("crm")
+        
+        # Definir tamanho da janela
+        window_width = 800
+        window_height = 600
+        
+        # Obter tamanho da tela
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        
+        # Calcular posição para centralizar a janela
+        position_top = int(screen_height / 2 - window_height / 2)
+        position_right = int(screen_width / 2 - window_width / 2)
+        
+        # Definir geometria da janela
+        root.geometry(f'{window_width}x{window_height}+{position_right}+{position_top}')
+
+        # Frame para centralizar o conteúdo
+        self.frame = tk.Frame(root)
+        self.frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
         # Controllers
         self.customer_controller = CustomerController()
@@ -15,24 +34,23 @@ class CRMApp:
         self.order_controller = OrderController()
 
         # GUI Components
-        self.label = tk.Label(root, text="Welcome to PyCRM", font=("Helvetica", 16))
+        self.label = tk.Label(self.frame, text=" CRM ", font=("Helvetica", 16))
         self.label.pack(pady=10)
 
         # Buttons
-        self.button_customer = tk.Button(root, text="Add Customer", command=self.add_customer)
+        self.button_customer = tk.Button(self.frame, text="Add Customer", command=self.add_customer)
         self.button_customer.pack(pady=5)
 
-        self.button_product = tk.Button(root, text="Add Product", command=self.add_product)
+        self.button_product = tk.Button(self.frame, text="Add Product", command=self.add_product)
         self.button_product.pack(pady=5)
 
-        self.button_order = tk.Button(root, text="Place Order", command=self.place_order)
+        self.button_order = tk.Button(self.frame, text="Place Order", command=self.place_order)
         self.button_order.pack(pady=5)
 
     def add_customer(self):
-        # Exemplo: Adicionar cliente
-        name = tk.simpledialog.askstring("Add Customer", "Enter customer name:")
-        email = tk.simpledialog.askstring("Add Customer", "Enter customer email:")
-        phone = tk.simpledialog.askstring("Add Customer", "Enter customer phone:")
+        name = simpledialog.askstring("Add Customer", "Enter customer name:")
+        email = simpledialog.askstring("Add Customer", "Enter customer email:")
+        phone = simpledialog.askstring("Add Customer", "Enter customer phone:")
 
         if name and email and phone:
             self.customer_controller.add_customer(name, email, phone)
@@ -41,10 +59,9 @@ class CRMApp:
             messagebox.showwarning("Warning", "Please fill in all fields.")
 
     def add_product(self):
-        # Exemplo: Adicionar produto
-        name = tk.simpledialog.askstring("Add Product", "Enter product name:")
-        price = tk.simpledialog.askfloat("Add Product", "Enter product price:")
-        description = tk.simpledialog.askstring("Add Product", "Enter product description:")
+        name = simpledialog.askstring("Add Product", "Enter product name:")
+        price = simpledialog.askfloat("Add Product", "Enter product price:")
+        description = simpledialog.askstring("Add Product", "Enter product description:")
 
         if name and price and description:
             self.product_controller.add_product(name, price, description)
@@ -53,9 +70,8 @@ class CRMApp:
             messagebox.showwarning("Warning", "Please fill in all fields.")
 
     def place_order(self):
-        # Exemplo: Realizar pedido
-        customer_name = tk.simpledialog.askstring("Place Order", "Enter customer name:")
-        products = tk.simpledialog.askstring("Place Order", "Enter products (comma-separated):").split(",")
+        customer_name = simpledialog.askstring("Place Order", "Enter customer name:")
+        products = simpledialog.askstring("Place Order", "Enter products (comma-separated):").split(",")
 
         customer = self.customer_controller.find_customer_by_name(customer_name)
         if not customer:
