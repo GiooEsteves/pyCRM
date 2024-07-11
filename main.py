@@ -1,4 +1,3 @@
-# main.py
 from views.cli import CLI
 
 if __name__ == "__main__":
